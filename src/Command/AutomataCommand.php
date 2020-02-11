@@ -24,6 +24,27 @@ class AutomataCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $modulus = new Modulus;
+        $this->processStreamIntoModulusResult(\STDIN, $modulus);
+        $output->writeln(sprintf('The input stream modulus-three is %d.', $modulus->getModulus()));
+
+        return 0;
+    }
+
+    public function processStreamIntoModulusResult($stream, StatefulObjectInterface $state): void
+    {
+        $stateMachine = $this->createFiniteStateMachine();
+        foreach ($this->getCharacterFromStream($stream) as $character) {
+            $transitionName = $this->determineTransitionName($state, $character);
+            if (!$stateMachine->can($state, $transitionName)) {
+                throw new \LogicException('Trying to apply invalid transition in finite state machine.');
+            }
+            $stateMachine->apply($state, $transitionName);
+        }
+    }
+
+    private function createFiniteStateMachine(): Workflow
+    {
         $definitionBuilder = new DefinitionBuilder;
         $definition = $definitionBuilder
             ->addPlaces(['S0', 'S1', 'S2'])
@@ -34,30 +55,16 @@ class AutomataCommand extends Command
             ->addTransition(new Transition('S2_0', 'S2', 'S1'))
             ->addTransition(new Transition('S2_1', 'S2', 'S2'))
             ->build();
-        $stateMachine = new Workflow($definition, new MethodMarkingStore(true, 'state'));
-
-        $modulus = new Modulus;
-
-        foreach ($this->getCharacterFromInputStream() as $character) {
-            $transitionName = $this->determineTransitionName($modulus, $character);
-            if (!$stateMachine->can($modulus, $transitionName)) {
-                throw new \LogicException('Trying to apply invalid transition in finite state machine.');
-            }
-            $stateMachine->apply($modulus, $transitionName);
-        }
-
-        $output->writeln(sprintf('The input stream modulus-three is %d.', $modulus->getModulus()));
-
-        return 0;
+        return new Workflow($definition, new MethodMarkingStore(true, 'state'));
     }
 
-    private function getCharacterFromInputStream(): iterable
+    private function getCharacterFromStream($handle): iterable
     {
-        while (!feof(\STDIN) && false !== $character = fread(\STDIN, 1)) {
+        if (!is_resource($handle)) {
+            throw new \TypeError(sprintf('Expected resource, got %s.', gettype($handle)));
+        }
+        while (!feof($handle) && false !== $character = fread($handle, 1)) {
             if (!in_array($character, ['0', '1'])) {
-                // Here we pretend we're a "fault-tolerant" application but honestly TTYs can inject all sorts of
-                // unwanted characters into the input stream (such as new lines, null-byte terminating control
-                // characters, etc) and I don't want to have to deal with them.
                 continue;
             }
             yield $character;
