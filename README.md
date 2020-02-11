@@ -17,6 +17,9 @@ pages from the last hour of my browser history include:
 - This application is fault-tolerant, it will ignore any input character that is
   not 1 or 0.
 - Couldn't think of a better name for the application than _automata_.
+- I could have written a state machine from scratch, but doing that in the
+  real-world when a perfectly fine open-source solution already exists is just a
+  waste of developer hours that could be better spent on the next ticket.
 
 ## Prerequisites
 
