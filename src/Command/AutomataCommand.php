@@ -55,6 +55,6 @@ class AutomataCommand extends Command
 
     private function determineTransitionName(StatefulObjectInterface $state, string $character): string
     {
-        // Transition name (as per the state machine definition) is <currentState>_<inputCharacter>.
+        return sprintf('%s_%s', $state->getState(), $character);
     }
 }
