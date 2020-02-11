@@ -3,6 +3,7 @@
 namespace BpiTests\Command;
 
 use BpiTest\Command\AutomataCommand;
+use BpiTest\State\Modulus;
 use PHPUnit\Framework\TestCase;
 
 class AutomataCommandTest extends TestCase
@@ -32,5 +33,16 @@ class AutomataCommandTest extends TestCase
             ['101000001110000010010001010111111001110100', 1],
             ['1110100111011001001101100001001000101100101', 0],
         ];
+    }
+
+    /**
+     * @test
+     * @dataProvider getTestInputStrings
+     */
+    public function testInputStringResultsInExpectedModulus(string $input, int $expectedModulus): void
+    {
+        $state = new Modulus;
+        // ??? $input ???
+        $this->assertEquals($expectedModulus, $state->getModulus());
     }
 }
