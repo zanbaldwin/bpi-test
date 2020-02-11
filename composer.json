@@ -10,5 +10,8 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {
+        "symfony/console": "^5.0",
+        "symfony/workflow": "^5.0"
+    }
 }
