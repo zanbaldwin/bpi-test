@@ -2,6 +2,7 @@
 
 namespace BpiTest\Command;
 
+use BpiTest\State\Modulus;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,6 +34,8 @@ class AutomataCommand extends Command
             ->addTransition(new Transition('S2_1', 'S2', 'S2'))
             ->build();
         $stateMachine = Workflow($definition, new MethodMarkingStore(true, 'state'));
+
+        $modulus = new Modulus;
 
         return 0;
     }
