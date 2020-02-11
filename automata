@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+require __DIR__ . '/vendor/autoload.php';
+
+use BpiTest\Command\AutomataCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application('automata', '1.0.0');
+$command = new AutomataCommand;
+
+$application->add($command);
+
+$application->setDefaultCommand($command->getName(), true);
+$application->run();
