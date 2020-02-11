@@ -42,7 +42,10 @@ class AutomataCommandTest extends TestCase
     public function testInputStringResultsInExpectedModulus(string $input, int $expectedModulus): void
     {
         $state = new Modulus;
-        // ??? $input ???
+        $stream = fopen('php://memory', 'r+');
+        fwrite($stream, $input);
+        rewind($stream);
+        $this->command->processStreamIntoModulusResult($stream, $state);
         $this->assertEquals($expectedModulus, $state->getModulus());
     }
 }
