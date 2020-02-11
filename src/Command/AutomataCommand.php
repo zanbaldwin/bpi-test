@@ -46,6 +46,8 @@ class AutomataCommand extends Command
             $stateMachine->apply($modulus, $transitionName);
         }
 
+        $output->writeln(sprintf('The input stream modulus-three is %d.', $modulus->getModulus()));
+
         return 0;
     }
 
