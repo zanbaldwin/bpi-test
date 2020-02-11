@@ -10,6 +10,16 @@
         }
     ],
     "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "BpiTest\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BpiTests\\": "tests/"
+        }
+    },
     "require": {
         "symfony/console": "^5.0",
         "symfony/workflow": "^5.0"
