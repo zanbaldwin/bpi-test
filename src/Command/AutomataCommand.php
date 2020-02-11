@@ -51,6 +51,15 @@ class AutomataCommand extends Command
 
     private function getCharacterFromInputStream(): iterable
     {
+        while (!feof(\STDIN) && false !== $character = fread(\STDIN, 1)) {
+            if (!in_array($character, ['0', '1'])) {
+                // Here we pretend we're a "fault-tolerant" application but honestly TTYs can inject all sorts of
+                // unwanted characters into the input stream (such as new lines, null-byte terminating control
+                // characters, etc) and I don't want to have to deal with them.
+                continue;
+            }
+            yield $character;
+        }
     }
 
     private function determineTransitionName(StatefulObjectInterface $state, string $character): string
