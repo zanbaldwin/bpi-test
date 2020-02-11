@@ -33,7 +33,7 @@ class AutomataCommand extends Command
             ->addTransition(new Transition('S2_0', 'S2', 'S1'))
             ->addTransition(new Transition('S2_1', 'S2', 'S2'))
             ->build();
-        $stateMachine = Workflow($definition, new MethodMarkingStore(true, 'state'));
+        $stateMachine = new Workflow($definition, new MethodMarkingStore(true, 'state'));
 
         $modulus = new Modulus;
 
