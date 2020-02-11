@@ -1,0 +1,14 @@
+{
+    "name": "zanbaldwin/bpi-test",
+    "description": "Technical Test for BPI using finite state machines",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zan Baldwin",
+            "email": "hello@zanbaldwin.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
