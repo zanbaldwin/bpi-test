@@ -3,6 +3,7 @@
 namespace BpiTest\Command;
 
 use BpiTest\State\Modulus;
+use BpiTest\State\StatefulObjectInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,6 +38,23 @@ class AutomataCommand extends Command
 
         $modulus = new Modulus;
 
+        foreach ($this->getCharacterFromInputStream() as $character) {
+            $transitionName = $this->determineTransitionName($modulus, $character);
+            if (!$stateMachine->can($modulus, $transitionName)) {
+                throw new \LogicException('Trying to apply invalid transition in finite state machine.');
+            }
+            $stateMachine->apply($modulus, $transitionName);
+        }
+
         return 0;
+    }
+
+    private function getCharacterFromInputStream(): iterable
+    {
+    }
+
+    private function determineTransitionName(StatefulObjectInterface $state, string $character): string
+    {
+        // Transition name (as per the state machine definition) is <currentState>_<inputCharacter>.
     }
 }
